@@ -1,4 +1,10 @@
 <body>
+  <script>
+	$(function() {
+	$( "#releaseDate" ).datepicker();
+	});
+  </script>
+  
   <script id="bookTemplate" type="text/template">
         <div id="book-<%= id %>">
     		<img src="<%= coverImage %>"/>
@@ -12,8 +18,9 @@
     		<button class="delete" data-id="<%= id %>">Delete</button>
 		</div>
   </script>
- </body>
- 
+</body>
+<h3>BookStore</h3>
+<div id ="error" style="color:red;margin-bottom:10px;"></div>
 <div id="books">
     <form id="addBook" action="#">
         <div>

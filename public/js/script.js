@@ -15,6 +15,26 @@ $(function(){
 	        id:null
 	    },
 	    
+	    validate:function(attributes){
+	    	var errors = "";
+	    	
+	    	if(!attributes.title){
+	    		errors+= "Book title should not be empty<br/>";
+	    	}
+	    	if(!attributes.author){
+	    		errors+= "Book author should not be empty<br/>";
+	    	}
+	    	if(!attributes.releaseDate){
+	    		errors+= "Release date should not be empty<br/>";
+	    	}
+	    	if(!attributes.keywords){
+	    		errors+= "Keywords should not be empty<br/>";
+	    	}
+	    	if(errors){
+	    		return errors;
+	    	}
+	    },
+	    
 	    sync: function(method, model, options) 
 	    {
 	         options.url = this.build_param(method);
@@ -132,19 +152,23 @@ $(function(){
 		            "releaseDate":$('#releaseDate').val(),
 		            "keywords":$('#keywords').val(),
 		        });
-    			
-    			edited.save(null,{
-	 	        	success:function(model,response,option){
-	 	        		var bookId = response.id;
-	 	        		$("#author").val("")
-	 	        		$("#title").val("")
-	 	        		$("#releaseDate").val("")
-	 	        		$("#author").val("")
-	 	        		$("#keywords").val("")
-	 	        		$("#bookId").val("")
-	 	        		that.render();
-	 	        	}
-	 	        });
+	        	if (!edited.isValid()) {
+	        		  $("#error").html(edited.validationError);  
+	        	}else{
+	    			edited.save(null,{
+		 	        	success:function(model,response,option){
+		 	        		var bookId = response.id;
+		 	        		$("#author").val("")
+		 	        		$("#title").val("")
+		 	        		$("#releaseDate").val("")
+		 	        		$("#author").val("")
+		 	        		$("#keywords").val("")
+		 	        		$("#bookId").val("")
+		 	        		$("#error").html("")
+		 	        		that.render();
+		 	        	}
+		 	        });
+	        	}
 	        }else{
 	        	var newObj = new BookStore();
 	        	newObj.set({
@@ -154,22 +178,27 @@ $(function(){
 		            "keywords":$('#keywords').val(),
 		        });
 	        	
-	        	 newObj.save(null,{
-	 	        	success:function(model,response,option){
-	 	        		var bookId = response.id;
-	 	        		$("#author").val("")
-	 	        		$("#title").val("")
-	 	        		$("#releaseDate").val("")
-	 	        		$("#author").val("")
-	 	        		$("#keywords").val("")
-	 	        		$("#bookId").val("")
-	 	        		newObj.set({
-	 		        		id: bookId
-	 		        	});
-	 	        		that.collection.add(newObj);
-	 	        		that.render();
-	 	        	}
-	 	        });
+	        	if (!newObj.isValid()) {
+	        		  $("#error").html(newObj.validationError);  
+	        	}else{
+	        		newObj.save(null,{
+		 	        	success:function(model,response,option){
+		 	        		var bookId = response.id;
+		 	        		$("#author").val("")
+		 	        		$("#title").val("")
+		 	        		$("#releaseDate").val("")
+		 	        		$("#author").val("")
+		 	        		$("#keywords").val("")
+		 	        		$("#bookId").val("")
+		 	        		$("#error").html("")
+		 	        		newObj.set({
+		 		        		id: bookId
+		 		        	});
+		 	        		that.collection.add(newObj);
+		 	        		that.render();
+		 	        	}
+		 	        });
+	        	}
 	        }
 	    },
 	    
@@ -187,7 +216,7 @@ $(function(){
 	    		}
 	    	});	
 	    }
-	     
+	    
 	});
 	
 	//Define router 
